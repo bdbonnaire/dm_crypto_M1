@@ -1,0 +1,1 @@
+gcc -O3 -g3 -rdynamic CMakeFiles/test.dir/mc48.c.o CMakeFiles/test.dir/attack.c.o CMakeFiles/test.dir/main.c.o -o test  -lm 
