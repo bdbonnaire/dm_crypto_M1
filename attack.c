@@ -102,10 +102,11 @@ void rand_m(uint8_t m[16])
 	}
 }
 
+/*
 void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 {
 	// initialize the hash table
-	uint64_t ht_size = 1.677722e7;
+	uint64_t ht_size = 1.7e7; // pow(2, 24)
 	uint8_t (*ht_m)[16]	= malloc(sizeof(uint8_t[ht_size][16]));
 	uint8_t (*ht_image)[8] = malloc(sizeof(uint8_t[ht_size][8]));
 
@@ -115,7 +116,6 @@ void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 	tcz48_dm(ht_m[0], ht_image[0]); 
 	while (1)
 	{
-		printf("%d \n", head);
 		beg:
 		// compute a random message and its image
 		rand_m(ht_m[head]);
@@ -156,6 +156,50 @@ void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 		}
 
 		head++;
+	}
+}
+*/
+
+void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
+{
+	while(1){
+	uint64_t ht_size = 1.68e6; // > 2^24
+	uint8_t (*ht_m1)[16]	= malloc(sizeof(uint8_t[ht_size][16]));
+
+	// fill the arrays with random elements
+	for(uint64_t i=0; i<ht_size; i++)
+	{
+		printf("r%lu \n", i);
+		rand_m(ht_m1[i]);
+	}
+
+	uint8_t (*ht_im1)[6]	= malloc(sizeof(uint8_t[ht_size][6]));
+
+	// compute elements images
+	for(uint64_t i=0; i<ht_size; i++)
+	{
+		printf("i%lu \n", i);
+		memcpy(ht_im1[i], h, sizeof(uint8_t)*6);
+		tcz48_dm(ht_m1[i], ht_im1[i]); 
+	}
+
+	// compare images
+	for(uint64_t i=0; i<ht_size-1; i++)
+	{
+		for(uint64_t j=i+1; j<ht_size; j++)
+		{
+			printf("c%lu %lu \n", i, j);
+			if(!memcmp(ht_im1[i], ht_im1[j], 8))
+			{
+				memcpy(m1, ht_m1[i], sizeof(uint8_t)*16);
+				memcpy(m2, ht_m1[j], sizeof(uint8_t)*16);
+				memcpy(h, ht_im1[i], sizeof(uint8_t)*8);
+				free(ht_m1);
+				free(ht_im1);
+				return;
+			}
+		}
+	}
 	}
 }
 
