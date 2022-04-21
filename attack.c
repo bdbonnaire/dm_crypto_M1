@@ -93,73 +93,13 @@ int is_equal(uint8_t *a,uint8_t *b, int size)
 void rand_m(uint8_t m[16])
 {
 	//compute 2 random var of 64bits giving us a 128bit random string
-	uint64_t m_rand1 = __my_little_xoshiro256starstar__next();
-	uint64_t m_rand2 = __my_little_xoshiro256starstar__next__unsafe();
-	for (int i=0; i<8; i++)
-	{
-		m[i] = (m_rand1 >> i*8);
-		m[i+8] = (m_rand2 >> i*8);
-	}
+	uint64_t m_rand = __my_little_xoshiro256starstar__next();
+	*(uint64_t*)m = m_rand;
+	*(uint64_t*)(m+8) = 0x00000000;
 }
 
-/*
 void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
-{
-	// initialize the hash table
-	uint64_t ht_size = 1.7e7; // pow(2, 24)
-	uint8_t (*ht_m)[16]	= malloc(sizeof(uint8_t[ht_size][16]));
-	uint8_t (*ht_image)[8] = malloc(sizeof(uint8_t[ht_size][8]));
-
-	uint64_t head = 1;
-	uint8_t image_temp[6];
-	rand_m(ht_m[0]);
-	tcz48_dm(ht_m[0], ht_image[0]); 
-	while (1)
-	{
-		beg:
-		// compute a random message and its image
-		rand_m(ht_m[head]);
-		memcpy(image_temp, h, sizeof(uint8_t)*6);
-		tcz48_dm(ht_m[head], image_temp); 
-		memcpy(ht_image[head], image_temp, sizeof(uint8_t)*6);
-
-		for(int i=0; i<head; i++)
-		{
-			// checks for image equality 
-			if(!memcmp(ht_image[i], ht_image[head], 8))
-			{
-				for(int j=0; j< ht_size; j++)
-					// checks equality with previous messages
-					if(!memcmp(ht_m[j], ht_m[head], 16))
-						// if equal recompute the rand message
-						goto beg;
-				// if the two messages are not equal return them
-				memcpy(m1, ht_m[head], sizeof(uint8_t)*16);
-				memcpy(m2, ht_m[i], sizeof(uint8_t)*16);
-				memcpy(h, ht_image[i], sizeof(uint8_t)*16);
-				free(ht_m); free(ht_image);
-				return;
-			}
-		}
-
-		// if the array is too small double it
-		if (head == ht_size -1)
-		{
-			printf("*"); // TEST
-			ht_size *= 2;
-			uint8_t (*ptr_m)[16] = realloc(ht_m,
-				   sizeof(uint8_t[ht_size][16]));
-			uint8_t (*ptr_im)[8] = realloc(ht_image,
-				   sizeof(uint8_t[ht_size][8]));
-			ht_m = ptr_m;
-			ht_image = ptr_im;
-		}
-
-		head++;
-	}
-}
-*/
-
+/*
 void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 {
 	while(1){
@@ -202,6 +142,7 @@ void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 	}
 	}
 }
+*/
 
 void attack(int d)
 {
