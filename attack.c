@@ -130,6 +130,7 @@ void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 		}
 		else
 		{
+			if(collision_check(m_temp, ht_m[HT_MOD_ACCESS], h, h_temp))
 			{
 				memcpy(m1, ht_m[HT_MOD_ACCESS], sizeof(uint8_t)*16);
 				memcpy(m2, m_temp,  sizeof(uint8_t)*16);
