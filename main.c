@@ -40,16 +40,26 @@ int main()
 	tcz48_dm(m1, h1); 
 	tcz48_dm(m2, h2); 
 
-	printf("m1_val = ");
-	for(int i =5; i<0; i--)
+	printf("m1 = ");
+	for(int i =15; i>=0; i--)
 	{
-		printf("%x", h1[i]);
+		printf("%x", m1[i]);
 	}
-	printf("\n");
-	for(int i =5; i<0; i--)
+	printf("\n m2 = ");
+	for(int i =15; i>=0; i--)
 	{
-		printf("%x", h2[i]);
+		printf("%x", m2[i]);
 	}
+	printf("\nm1_val = %lu", *(uint64_t*)h1);
+//	for(int i =5; i>=0; i--)
+//	{
+//		printf("%x", h1[i]);
+//	}
+	printf("\nm2_val = %lu", *(uint64_t*)h2);
+//	for(int i =5; i>=0; i--)
+//	{
+//		printf("%x", h2[i]);
+//	}
 
 	
 	return 0;

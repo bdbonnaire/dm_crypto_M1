@@ -29,14 +29,22 @@
 #define IVB3 0x73
 #define IVB4 0x74
 #define IVB5 0x06
+// 20e6
+#define HT_SIZE 20000000
 
-int is_equal(uint8_t *a,uint8_t *b, int size)
+int collision_check(uint8_t *a,uint8_t *b, uint8_t *iv, uint8_t *ha)
 {
-	for(int i=0; i<size; i++)
-	{
-		if (a[i] != b[i] ) return 0;
-	}
-	return 1;
+	// test if the collision is real by recomputing
+	// the previous message's image
+	uint8_t h_temp2[6];
+	// give the value of the iv
+	memcpy(h_temp2, iv, sizeof(uint8_t[6]));
+	tcz48_dm(ha, h_temp2);
+	if( *(uint64_t*)h_temp2 == *(uint64_t*)h_temp)
+		return 1;
+	else
+		return 0;
+
 }
 
 //void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
@@ -94,11 +102,43 @@ void rand_m(uint8_t m[16])
 {
 	//compute 2 random var of 64bits giving us a 128bit random string
 	uint64_t m_rand = __my_little_xoshiro256starstar__next();
+	//consider the pointer to 128bits as a 64bit ptr
 	*(uint64_t*)m = m_rand;
 	*(uint64_t*)(m+8) = 0x00000000;
 }
 
 void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
+{
+	// array containing the messages
+	uint8_t (*ht_m)[16]	= calloc(HT_SIZE, sizeof(uint8_t[16]));
+	uint8_t m_temp[16];
+	uint8_t zero[16] = {0};
+	uint8_t h_temp[6];
+	while (1)
+	{
+		memcpy(h_temp, h, sizeof(uint8_t[6]));
+		rand_m(m_temp);
+		printf("%lu\t", *(uint64_t*)m_temp); //TEST
+		tcz48_dm(m_temp, h_temp);
+		printf("%lu\n", *(uint64_t*)h_temp); //TEST
+#define HT_MOD_ACCESS (uint64_t)*h_temp % HT_SIZE
+		if(!memcmp(ht_m[HT_MOD_ACCESS], zero, sizeof(uint8_t[16])))
+		{
+			memcpy(ht_m[HT_MOD_ACCESS],
+				   	m_temp, sizeof(uint8_t[16]));
+		}
+		else
+		{
+			{
+				memcpy(m1, ht_m[HT_MOD_ACCESS], sizeof(uint8_t)*16);
+				memcpy(m2, m_temp,  sizeof(uint8_t)*16);
+				memcpy(h, h_temp, sizeof(uint8_t)*6);
+				free(ht_m);
+				return;
+			}
+		}
+	}
+}
 /*
 void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 {

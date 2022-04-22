@@ -19,14 +19,19 @@
 #define ATTACK_H
 #include <stdint.h>
 
+typedef struct node {
+    uint8_t val[16];
+    struct node * next;
+} node_t;
+
+/// checks if two elements collide
+int collision_check(uint8_t *a,uint8_t *b, uint8_t *iv, uint8_t *ha);
+void rand_m(uint8_t m[16]);
+
 /// Implementation of a multicollisions attack on Narrow Pipe MD hash
 /**
  * @arg d defines the number of collisions computed. For a given d 2^d will be given.
  */
-
-int is_equal(uint8_t *a,uint8_t *b, int size);
-void rand_m(uint8_t m[16]);
-
 void attack(int d);
 
 /// Searches for a collision for the function tcz48_dm
