@@ -50,12 +50,12 @@ int main()
 	{
 		printf("%x", m2[i]);
 	}
-	printf("\nm1_val = %lu", *(uint64_t*)h1);
+	printf("\nm1_val = %lu", (*(uint64_t*)h1) & 0xFFFFFFFFFFFF);
 //	for(int i =5; i>=0; i--)
 //	{
 //		printf("%x", h1[i]);
 //	}
-	printf("\nm2_val = %lu", *(uint64_t*)h2);
+	printf("\nm2_val = %lu", (*(uint64_t*)h2) & 0xFFFFFFFFFFFF);
 //	for(int i =5; i>=0; i--)
 //	{
 //		printf("%x", h2[i]);

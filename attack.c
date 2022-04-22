@@ -36,11 +36,12 @@ int collision_check(uint8_t *a,uint8_t *b, uint8_t *iv, uint8_t *ha)
 {
 	// test if the collision is real by recomputing
 	// the previous message's image
-	uint8_t h_temp2[6];
+	uint8_t h_temp[6];
 	// give the value of the iv
-	memcpy(h_temp2, iv, sizeof(uint8_t[6]));
-	tcz48_dm(ha, h_temp2);
-	if( *(uint64_t*)h_temp2 == *(uint64_t*)h_temp)
+	memcpy(h_temp, iv, sizeof(uint8_t[6]));
+	//compute b's image, put it in h_temp
+	tcz48_dm(b, h_temp);
+	if(!memcmp(h_temp, ha, sizeof(uint8_t[6])))
 		return 1;
 	else
 		return 0;
@@ -120,8 +121,8 @@ void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 		rand_m(m_temp);
 		printf("%lu\t", *(uint64_t*)m_temp); //TEST
 		tcz48_dm(m_temp, h_temp);
-		printf("%lu\n", *(uint64_t*)h_temp); //TEST
-#define HT_MOD_ACCESS (uint64_t)*h_temp % HT_SIZE
+		printf("%lu\n", (*(uint64_t*)h_temp) & 0xFFFFFFFFFFFF); //TEST
+#define HT_MOD_ACCESS ((*(uint64_t*)h_temp) & 0xFFFFFFFFFFFF) % HT_SIZE
 		if(!memcmp(ht_m[HT_MOD_ACCESS], zero, sizeof(uint8_t[16])))
 		{
 			memcpy(ht_m[HT_MOD_ACCESS],
