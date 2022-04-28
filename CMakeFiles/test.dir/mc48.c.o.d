@@ -1,6 +1,6 @@
 CMakeFiles/test.dir/mc48.c.o: /home/bdb/master/M1S2/Crypto/mc48.c \
  /usr/include/stdc-predef.h /home/bdb/master/M1S2/Crypto/mc48.h \
- /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdint.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.2.0/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/bits/wordsize.h /usr/include/bits/timesize.h \

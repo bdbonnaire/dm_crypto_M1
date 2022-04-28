@@ -32,8 +32,8 @@ int main()
 {
 	uint8_t iv[6] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5};
 	uint8_t h[6] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5};
-	uint8_t h1[6] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5};
-	uint8_t h2[6] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5};
+	uint8_t h1[8] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5,0,0};
+	uint8_t h2[8] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5,0,0};
 	uint8_t m1[16], m2[16];
 	uint8_t val_m1[6], val_m2[6];
 	find_col(h, m1, m2);

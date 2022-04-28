@@ -19,11 +19,6 @@
 #define ATTACK_H
 #include <stdint.h>
 
-typedef struct node {
-    uint8_t val[16];
-    struct node * next;
-} node_t;
-
 /// checks if two elements collide
 int collision_check(uint8_t *a,uint8_t *b, uint8_t *iv, uint8_t *ha);
 void rand_m(uint8_t m[16]);

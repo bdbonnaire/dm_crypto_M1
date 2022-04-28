@@ -3,7 +3,7 @@ project(DM_Crypto C)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_COMPILER "gcc")
-set(CMAKE_C_FLAGS "-O3 -g3")
+set(CMAKE_C_FLAGS "-O3")
 #set(CMAKE_C_FLAGS "-Wall -Werror")
 set(SRCS
 	./mc48.c
