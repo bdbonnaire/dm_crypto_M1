@@ -102,25 +102,26 @@ void attack(int d)
 		uint8_t iv[6] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5};
 		// find_col update iv with the new value
 		for(int i=0; i<d; i++)
+		{
 			find_col(iv, m0[i], m1[i]);
+		}
 
 		FILE *results = fopen("results.out", "a");
-		for(int k=0; k<d; k++)
+		// this goes through all the possibilities
+		for(int mask=0; mask<pow(2, d); mask++)
 		{
-			// this goes through all the possibilities
-			for(int mask=0; mask<pow(2, d); mask++)
+			for(int i=0; i<d; i++)
 			{
-				for(int i=0; i<d; i++)
-				{
-					uint8_t which = (mask >> i) & 0x01;
-					if (which)
-						for(int j=0; j<16; j++)
-							fprintf(results, "%x", m0[k][j]);
-					else
-						for(int j=0; j<16; j++)
-							fprintf(results, "%x", m1[k][j]);
-				}
+				uint8_t which = (mask >> i) & 0x01;
+				if (which)
+					for(int j=0; j<16; j++)
+						fprintf(results, "%x", m0[i][j]);
+				else
+					for(int j=0; j<16; j++)
+						fprintf(results, "%x", m1[i][j]);
 			}
+			fprintf(results, "\n");
 		}
+		fclose(results);
 	}
 }

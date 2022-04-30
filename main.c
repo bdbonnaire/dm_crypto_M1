@@ -6,7 +6,7 @@
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  04/17/22 11:42:49
+ *        Created:  04/29/22 00:57:34
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,51 +16,33 @@
  * =====================================================================================
  */
 #include <stdlib.h>
+#include <ctype.h>
 #include <stdio.h>
-#include <stdint.h>
 #include "attack.h"
-#include "mc48.h"
 
-#define IVB0 0xE9
-#define IVB1 0x38
-#define IVB2 0x05
-#define IVB3 0x73
-#define IVB4 0x74
-#define IVB5 0x06
-
-int main()
+int isnbr(char str[])
 {
-	uint8_t iv[6] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5};
-	uint8_t h[6] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5};
-	uint8_t h1[8] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5,0,0};
-	uint8_t h2[8] = {IVB0,IVB1,IVB2,IVB3,IVB4,IVB5,0,0};
-	uint8_t m1[16], m2[16];
-	uint8_t val_m1[6], val_m2[6];
-	find_col(h, m1, m2);
-	tcz48_dm(m1, h1); 
-	tcz48_dm(m2, h2); 
-
-	printf("m1 = ");
-	for(int i =15; i>=0; i--)
+	int i = 0;
+	int isN = 1;
+	while (str[i] != '\0')
 	{
-		printf("%x", m1[i]);
+		isN *= isdigit(str[i]);	
+		i++;
 	}
-	printf("\n m2 = ");
-	for(int i =15; i>=0; i--)
+	return isN;
+}
+int main(int argc, char *argv[])
+{
+	if(argc == 2 && isnbr(argv[1]))
 	{
-		printf("%x", m2[i]);
+		printf("Computing Collisions...\n");
+		attack(atoi(argv[1]));
+		printf("Done !");
+		return 0;
+	}	
+	else
+	{
+		printf("Argument error. Please check your command.");
+		return 1;
 	}
-	printf("\nm1_val = %lu", (*(uint64_t*)h1) & 0xFFFFFFFFFFFF);
-//	for(int i =5; i>=0; i--)
-//	{
-//		printf("%x", h1[i]);
-//	}
-	printf("\nm2_val = %lu", (*(uint64_t*)h2) & 0xFFFFFFFFFFFF);
-//	for(int i =5; i>=0; i--)
-//	{
-//		printf("%x", h2[i]);
-//	}
-
-	
-	return 0;
 }
